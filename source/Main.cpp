@@ -1,36 +1,15 @@
-#include <glad/gl.h>
-#include <GLFW/glfw3.h>
-#include <spdlog/spdlog.h>
+#include "Game.h"
+#include "Init.h"
+#include "Log.h"
 
 int main()
 {
-  spdlog::set_level(spdlog::level::trace);
-  spdlog::trace("welcome to Corvus Engine!");
+  cvs::Init::setup();
 
-  if (glfwInit())
-  {
-    spdlog::info("GLFW initialized!");
-  }
+  cvs::Game game;
+  game.run();
 
-  GLFWwindow* window = glfwCreateWindow(640, 480, "Corvus", nullptr, nullptr);
-  if (window != nullptr)
-  {
-    spdlog::info("GLFW window created!");
-    glfwMakeContextCurrent(window);
-  }
+  cvs::Init::cleanup();
 
-  if (gladLoadGL((GLADloadfunc)glfwGetProcAddress))
-  {
-    spdlog::info("GLAD loaded OpenGL");
-  }
-
-  while (!glfwWindowShouldClose(window))
-  {
-    glfwPollEvents();
-    glfwSwapBuffers(window);
-  }
-
-  glfwTerminate();
-  spdlog::info("Program terminated normally!");
   return 0;
 }
