@@ -1,0 +1,39 @@
+cmake_minimum_required (VERSION 3.20...3.30)
+
+project (Corvus)
+
+
+add_library (Corvus SHARED
+  "Include/Corvus/Engine.hpp"
+  "Source/Core.hpp"
+  "Source/Test.cpp"
+  "source/Test.hpp"
+)
+
+target_include_directories (Corvus PUBLIC "Include")
+
+
+set_target_properties (Corvus
+  PROPERTIES
+  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/out/$<CONFIG>/Corvus/lib"
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/out/$<CONFIG>/Corvus/bin"
+)
+
+
+target_compile_definitions (Corvus
+  PUBLIC
+  $<$<CONFIG:Debug>:CORVUS_DEBUG>
+  $<$<CONFIG:Release>:CORVUS_RELEASE>
+  PRIVATE
+  CORVUS_BUILD_DLL
+)
+
+
+if (WIN32)
+
+target_compile_definitions (Corvus
+  PUBLIC
+  CORVUS_PLATFORM_WIN32
+)
+
+endif ()
