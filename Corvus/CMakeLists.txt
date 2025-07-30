@@ -5,9 +5,14 @@ project (Corvus)
 
 add_library (Corvus SHARED
   "Include/Corvus/Engine.hpp"
-  "Source/Core.hpp"
-  "Source/Test.cpp"
-  "source/Test.hpp"
+
+  "Source/Core/Core.hpp"
+  "Source/Core/Types.hpp"
+
+  "Source/Window/Win32/Win32Window.cpp"
+  "Source/Window/Win32/Win32Window.hpp"
+  "Source/Window/Window.cpp"
+  "Source/Window/Window.hpp"
 )
 
 target_include_directories (Corvus PUBLIC "Include")

@@ -1,3 +1,4 @@
 #pragma once
 
-#include "../../Source/Test.hpp" // IWYU pragma: export
+#include "../../Source/Core/Types.hpp"    // IWYU pragma: export
+#include "../../Source/Window/Window.hpp" // IWYU pragma: export
