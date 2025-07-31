@@ -12,16 +12,6 @@ target_link_libraries (Sandbox PRIVATE Corvus)
 
 set_target_properties (Sandbox
   PROPERTIES
-  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/out/$<CONFIG>/Sandbox/lib"
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/out/$<CONFIG>/Sandbox/bin"
+  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/out/$<CONFIG>/lib"
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/out/$<CONFIG>/bin"
 )
-
-
-if (WIN32)
-
-  add_custom_command (
-    TARGET Sandbox POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Corvus> $<TARGET_FILE_DIR:Sandbox>
-  )
-
-endif ()
