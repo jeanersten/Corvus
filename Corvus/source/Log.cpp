@@ -13,22 +13,22 @@ namespace Corvus
     switch (level)
     {
       case LogLevel::Trace:
-      return "TRACE";
+      return CORVUS_LOG_COLOR_TRACE "TRACE" CORVUS_LOG_COLOR_DEFAULT;
 
       case LogLevel::Info:
-      return "INFO";
+      return CORVUS_LOG_COLOR_INFO "INFO" CORVUS_LOG_COLOR_DEFAULT;
 
       case LogLevel::Warn:
-      return "WARN";
+      return CORVUS_LOG_COLOR_WARN "WARN" CORVUS_LOG_COLOR_DEFAULT;
 
       case LogLevel::Err:
-      return "ERR";
+      return CORVUS_LOG_COLOR_ERR "ERR" CORVUS_LOG_COLOR_DEFAULT;
 
       case LogLevel::Fatal:
-      return "FATAL";
+      return CORVUS_LOG_COLOR_FATAL "FATAL" CORVUS_LOG_COLOR_DEFAULT;
 
       default:
-      return "UNKNOWN";
+      return CORVUS_LOG_COLOR_UNKNOWN "UNKNOWN" CORVUS_LOG_COLOR_DEFAULT;
     }
   }
 

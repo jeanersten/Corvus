@@ -7,6 +7,14 @@
 #include <string>
 #include <string_view>
 
+#define CORVUS_LOG_COLOR_UNKNOWN "\x1B[90m"
+#define CORVUS_LOG_COLOR_TRACE   "\x1B[36m"
+#define CORVUS_LOG_COLOR_INFO    "\x1B[32m"
+#define CORVUS_LOG_COLOR_WARN    "\x1B[33m"
+#define CORVUS_LOG_COLOR_ERR     "\x1B[31m"
+#define CORVUS_LOG_COLOR_FATAL   "\x1B[95m"
+#define CORVUS_LOG_COLOR_DEFAULT "\x1B[0m"
+
 namespace Corvus
 {
   enum class LogLevel
@@ -53,7 +61,7 @@ namespace Corvus
                              std::chrono::current_zone()->to_local(now_tp)) };
       std::string format_str { std::format(fmt, std::forward<Args>(args)...) };
 
-      std::println("[{}]-[{}]-[{}]: {}", m_name, time_str, 
+      std::println("[{}]-[{}]-[{}]: {}", m_name, time_str,
                    GetLevelString(level), format_str);
     }
 

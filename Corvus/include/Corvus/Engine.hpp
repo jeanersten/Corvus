@@ -11,23 +11,30 @@
 
   // entry point
   #if defined(CORVUS_DEBUG)
-    #define CORVUS_REGISTER_APPLICATION_ENTRY(C)         \
-    int wmain(int argc, wchar_t* argv[])                 \
-    {                                                    \
-      HINSTANCE instance { GetModuleHandle(NULL) };      \
-      PWSTR cmd_line { GetCommandLine() };               \
-      int show_code { SW_SHOWDEFAULT };                  \
-                                                         \
-      Corvus::Platform::s_platform_data[1] = &instance;  \
-      Corvus::Platform::s_platform_data[2] = &cmd_line;  \
-      Corvus::Platform::s_platform_data[3] = &show_code; \
-                                                         \
-      C* app { new C() };                                \
-      app->Run();                                        \
-                                                         \
-      delete app;                                        \
-                                                         \
-      return 0;                                          \
+    #define CORVUS_REGISTER_APPLICATION_ENTRY(C)                \
+    int wmain(int argc, wchar_t* argv[])                        \
+    {                                                           \
+      HANDLE stdout_handle { GetStdHandle(STD_OUTPUT_HANDLE) }; \
+      DWORD mode { 0 };                                         \
+                                                                \
+      GetConsoleMode(stdout_handle, &mode);                     \
+      mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;               \
+      SetConsoleMode(stdout_handle, mode);                      \
+                                                                \
+      HINSTANCE instance { GetModuleHandle(NULL) };             \
+      PWSTR cmd_line { GetCommandLine() };                      \
+      int show_code { SW_SHOWDEFAULT };                         \
+                                                                \
+      Corvus::Platform::s_platform_data[1] = &instance;         \
+      Corvus::Platform::s_platform_data[2] = &cmd_line;         \
+      Corvus::Platform::s_platform_data[3] = &show_code;        \
+                                                                \
+      C* app { new C() };                                       \
+      app->Run();                                               \
+                                                                \
+      delete app;                                               \
+                                                                \
+      return 0;                                                 \
     }
   #elif defined(CORVUS_RELEASE)
     #define CORVUS_REGISTER_APPLICATION_ENTRY(C)         \
