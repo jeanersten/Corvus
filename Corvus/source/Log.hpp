@@ -36,7 +36,7 @@ namespace Corvus
     // default print
     template<typename... Args>
     void Print(std::format_string<Args...> fmt,
-               Args&&... args)
+               Args&&... args) const
     {
       std::chrono::time_point now_tp { std::chrono::floor<std::chrono::seconds>(
                                        std::chrono::system_clock::now()) };
@@ -52,7 +52,7 @@ namespace Corvus
     // leveled print
     template<typename... Args>
     void Print(LogLevel level, std::format_string<Args...> fmt,
-               Args&&... args)
+               Args&&... args) const
     {
       std::chrono::time_point now_tp { std::chrono::floor<std::chrono::seconds>(
                                        std::chrono::system_clock::now()) };
@@ -74,12 +74,12 @@ namespace Corvus
   class CORVUS_API Log
   {
   public:
-    inline static Logger& GetEngineLogger()
+    inline static const Logger& GetEngineLogger()
     {
       return s_engine_logger;
     }
 
-    inline static Logger& GetClientLogger()
+    inline static const Logger& GetClientLogger()
     {
       return s_client_logger;
     }
