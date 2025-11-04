@@ -18,9 +18,9 @@ namespace Corvus
     HINSTANCE instance { *Platform::GetDataPointer<HINSTANCE>(1) };
 
     wnd_class.style = CS_OWNDC;
-    wnd_class.lpszClassName = CLASS_NAME;
     wnd_class.lpfnWndProc = Callback;
     wnd_class.hInstance = instance;
+    wnd_class.lpszClassName = CLASS_NAME;
 
     RegisterClass(&wnd_class);
 
@@ -46,14 +46,17 @@ namespace Corvus
   {
     MSG message { };
 
-    if (GetMessage(&message, NULL, 0, 0) > 0)
+    while (PeekMessage(&message, NULL, 0, 0, PM_REMOVE) != 0)
     {
+      if (message.message == WM_QUIT)
+      {
+        m_should_close = true;
+
+        break;
+      }
+
       TranslateMessage(&message);
       DispatchMessage(&message);
-    }
-    else
-    {
-      m_should_close = true;
     }
   }
 
