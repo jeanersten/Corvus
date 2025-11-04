@@ -43,6 +43,11 @@ namespace Corvus
     friend class EventDispatcher;
 
   public:
+    inline bool IsHandled()
+    {
+      return m_handled;
+    }
+
     inline bool IsInCategory(EventCategory category)
     {
       return static_cast<bool>(GetCategory() & category);

@@ -8,6 +8,8 @@ add_library(Corvus SHARED
   "source/Application.cpp"
   "source/Event.hpp"
   "source/Event.cpp"
+  "source/Layer.hpp"
+  "source/Layer.cpp"
   "source/Log.hpp"
   "source/Log.cpp"
   "source/Platform.hpp"

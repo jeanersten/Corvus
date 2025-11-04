@@ -2,6 +2,7 @@
 
 #include "Core/Core.hpp"
 #include "Event.hpp"
+#include "Layer.hpp"
 #include "Window.hpp"
 
 namespace Corvus
@@ -15,8 +16,17 @@ namespace Corvus
     void Run();
 
   protected:
-    virtual void OnEvent(Event& event) = 0;
+    void PushLayer(Layer* layer);
+    void PopLayer(Layer* layer);
+    void PushOverlay(Layer* overlay);
+    void PopOverlay(Layer* overlay);
+
+    virtual void OnSetup();
+    virtual void OnCleanup();
+    virtual void OnUpdate();
+    virtual void OnEvent(Event& event);
 
     Window* m_window;
+    LayerStack* m_layer_stack;
   };
 }

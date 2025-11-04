@@ -2,6 +2,7 @@
 
 #include "../../source/Application.hpp"
 #include "../../source/Event.hpp"
+#include "../../source/Layer.hpp"
 #include "../../source/Log.hpp"
 #include "../../source/Platform.hpp"
 #include "../../source/Window.hpp"
