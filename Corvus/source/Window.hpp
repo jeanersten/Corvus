@@ -15,6 +15,7 @@ namespace Corvus
 
     virtual inline Uint32 GetWidth() const = 0;
     virtual inline Uint32 GetHeight() const = 0;
+    virtual inline void* GetNativeWindow() const = 0;
     virtual inline bool ShouldClose() const = 0;
 
     virtual inline void SetEventCallback(EventCallbackFn callback) = 0;
@@ -28,6 +29,5 @@ namespace Corvus
       Uint32 height;
       const wchar_t* title;
     };
-
   };
 }

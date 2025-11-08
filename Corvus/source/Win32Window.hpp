@@ -1,8 +1,9 @@
 #pragma once
 
-#ifdef CORVUS_PLATFORM_WIN32
+#if defined(CORVUS_PLATFORM_WIN32)
 
 #include "Core/Core.hpp"
+#include "GraphicsContext.hpp"
 #include "Window.hpp"
 #include <windows.h>
 #include <functional>
@@ -25,6 +26,11 @@ namespace Corvus
       return m_data.height;
     }
 
+    inline void* GetNativeWindow() const override
+    {
+      return static_cast<void*>(m_handle);
+    }
+
     inline bool ShouldClose() const override
     {
       return m_should_close;
@@ -44,6 +50,8 @@ namespace Corvus
     bool m_should_close;
 
     EventCallbackFn m_callback;
+
+    GraphicsContext* m_context;
 
     HWND m_handle;
 

@@ -1,6 +1,7 @@
-#ifdef CORVUS_PLATFORM_WIN32
+#if defined(CORVUS_PLATFORM_WIN32)
 
 #include "Core/Core.hpp"
+#include "GraphicsContext.hpp"
 #include "Event.hpp"
 #include "Platform.hpp"
 #include "Win32Window.hpp"
@@ -12,6 +13,7 @@ namespace Corvus
   Win32Window::Win32Window(Uint32 width, Uint32 height, const wchar_t* title)
     : m_data(width, height, title)
     , m_should_close(false)
+    , m_context(nullptr)
     , m_handle(NULL)
   {
     WNDCLASS wnd_class { };
@@ -39,6 +41,9 @@ namespace Corvus
                               wnd_width, wnd_height,
                               NULL, NULL, instance, this);
 
+    m_context = GraphicsContext::Create(this);
+    m_context->Init();
+
     ShowWindow(m_handle, *Platform::GetDataPointer<int>(3));
   }
 
@@ -58,6 +63,8 @@ namespace Corvus
       TranslateMessage(&message);
       DispatchMessage(&message);
     }
+
+    m_context->SwapBuffers();
   }
 
   LRESULT Win32Window::Callback(HWND handle, UINT msg_type,
@@ -100,133 +107,135 @@ namespace Corvus
     switch(msg_type)
     {
       case WM_CREATE:
-        {
-          WindowCreatedEvent event { };
+      {
+        WindowCreatedEvent event { };
 
-          if (m_callback) m_callback(event);
-        }
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_CLOSE:
-        {
-          DestroyWindow(m_handle);
-        }
+      {
+        DestroyWindow(m_handle);
+      }
       break;
 
       case WM_DESTROY:
-        {
-          WindowDestroyedEvent event { };
+      {
+        WindowDestroyedEvent event { };
 
-          if (m_callback) m_callback(event);
+        if (m_callback) m_callback(event);
 
-          PostQuitMessage(0);
-        }
+        PostQuitMessage(0);
+      }
       break;
 
       case WM_SETFOCUS:
-        {
-          WindowGainedFocusEvent event { };
+      {
+        WindowGainedFocusEvent event { };
 
-          if (m_callback) m_callback(event);
-        }
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_KILLFOCUS:
-        {
-          WindowLostFocusEvent event { };
+      {
+        WindowLostFocusEvent event { };
 
-          if (m_callback) m_callback(event);
-        }
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_MOVE:
-        {
-          WindowMovedEvent event { LOWORD(lparam), HIWORD(lparam) }; 
+      {
+        WindowMovedEvent event { LOWORD(lparam), HIWORD(lparam) }; 
 
-          if (m_callback) m_callback(event);
-        }
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_SIZE:
-        {
-          WindowResizedEvent event { LOWORD(lparam), HIWORD(lparam) };
+      {
+        WindowResizedEvent event { LOWORD(lparam), HIWORD(lparam) };
 
-          m_data.width = event.GetWidth();
-          m_data.height = event.GetHeight();
+        m_data.width = event.GetWidth();
+        m_data.height = event.GetHeight();
 
-          if (m_callback) m_callback(event);
-        }
+        m_context->ResizeBuffers();
+
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_KEYDOWN:
-        {
-          bool is_repeated { (lparam & (1 << 30)) != 0 };
-          KeyboardKeyPressedEvent event { (Uint32)wparam, is_repeated };
+      {
+        bool is_repeated { (lparam & (1 << 30)) != 0 };
+        KeyboardKeyPressedEvent event { (Uint32)wparam, is_repeated };
 
-          if (m_callback) m_callback(event);
-        }
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_KEYUP:
-        {
-          KeyboardKeyReleasedEvent event { (Uint32)wparam };
+      {
+        KeyboardKeyReleasedEvent event { (Uint32)wparam };
 
-          if (m_callback) m_callback(event);
-        }
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_LBUTTONDOWN:
-        {
-            MouseButtonPressedEvent event { VK_LBUTTON };
-
-            if (m_callback) m_callback(event);
-        }
+      {
+        MouseButtonPressedEvent event { VK_LBUTTON };
+        
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_LBUTTONUP:
-        {
-            MouseButtonReleasedEvent event { VK_LBUTTON };
+      {
+        MouseButtonReleasedEvent event { VK_LBUTTON };
 
-            if (m_callback) m_callback(event);
-        }
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_RBUTTONDOWN:
-        {
-            MouseButtonPressedEvent event { VK_RBUTTON };
-
-            if (m_callback) m_callback(event);
-        }
+      {
+        MouseButtonPressedEvent event { VK_RBUTTON };
+        
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_RBUTTONUP:
-        {
-            MouseButtonReleasedEvent event { VK_RBUTTON };
+      {
+        MouseButtonReleasedEvent event { VK_RBUTTON };
 
-            if (m_callback) m_callback(event);
-        }
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_MBUTTONDOWN:
-        {
-            MouseButtonPressedEvent event { VK_MBUTTON };
+      {
+        MouseButtonPressedEvent event { VK_MBUTTON };
 
-            if (m_callback) m_callback(event);
-        }
+        if (m_callback) m_callback(event);
+      }
       break;
 
       case WM_MBUTTONUP:
-        {
-            MouseButtonReleasedEvent event { VK_MBUTTON };
+      {
+        MouseButtonReleasedEvent event { VK_MBUTTON };
 
-            if (m_callback) m_callback(event);
-        }
+        if (m_callback) m_callback(event);
+      }
       break;
 
       default:
-        {
-          result = DefWindowProc(m_handle, msg_type, wparam, lparam);
-        }
+      {
+        result = DefWindowProc(m_handle, msg_type, wparam, lparam);
+      }
       break;
     }
 

@@ -12,6 +12,9 @@ using Uint16 = std::uint16_t;
 using Uint32 = std::uint32_t;
 using Uint64 = std::uint64_t;
 
+using Float32 = float;
+using Float64 = double;
+
 // api flags, usually shared library purpose
 #if defined(CORVUS_PLATFORM_WIN32)
   #if defined(CORVUS_BUILD_ENGINE)
