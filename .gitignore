@@ -3,3 +3,5 @@
 .zed/
 build/
 out/
+
+CMakeSettings.json
