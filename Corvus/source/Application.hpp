@@ -63,8 +63,6 @@ namespace Corvus
       overlay->OnAttach();
       m_overlays.emplace_back(std::move(overlay));
 
-      T* raw{ overlay.get() };
-
       return raw;
     }
 
