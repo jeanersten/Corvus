@@ -1,3 +1,4 @@
+#include "Core/PCH.hpp"
 #include "Core/Core.hpp"
 #include "Platform/Platform.hpp"
 #include "Event.hpp"

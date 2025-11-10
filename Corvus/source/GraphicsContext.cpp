@@ -1,7 +1,7 @@
+#include "Core/PCH.hpp"
 #include "Platform/Platform.hpp"
 #include "GraphicsContext.hpp"
 #include "Window.hpp"
-#include <memory>
 
 namespace Corvus
 {

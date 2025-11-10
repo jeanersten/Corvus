@@ -1,11 +1,10 @@
 #if defined(CORVUS_PLATFORM_WIN32)
 
+#include "../Core/PCH.hpp"
 #include "../Core/Core.hpp"
 #include "../Event.hpp"
 #include "Platform.hpp"
 #include "Win32Window.hpp"
-#include <windows.h>
-#include <cwchar>
 
 namespace Corvus
 {

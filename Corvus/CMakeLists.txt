@@ -25,13 +25,18 @@ add_library(Corvus SHARED
   "source/Log.cpp"
   "source/Window.hpp"
   "source/Window.cpp"
- )
+)
 
 target_compile_definitions(Corvus
   PUBLIC
   $<$<CONFIG:Debug>:"CORVUS_DEBUG">
   PRIVATE
   "CORVUS_BUILD_ENGINE"
+)
+
+target_precompile_headers(Corvus
+  PRIVATE
+  "source/Core/PCH.hpp"
 )
 
 target_include_directories(Corvus PUBLIC "include")
@@ -49,7 +54,7 @@ if(WIN32)
       dxgi d3d11
     )
   endif()
-  
+
   target_compile_definitions(Corvus
     PUBLIC
     "UNICODE"

@@ -1,9 +1,7 @@
+#include "Core/PCH.hpp"
 #include "Application.hpp"
 #include "Event.hpp"
 #include "Layer.hpp"
-#include <chrono>
-#include <functional>
-#include <thread>
 
 namespace Corvus
 {

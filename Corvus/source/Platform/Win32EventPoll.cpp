@@ -1,7 +1,7 @@
 #if defined(CORVUS_PLATFORM_WIN32)
 
+#include "../Core/PCH.hpp"
 #include "Win32EventPoll.hpp"
-#include <windows.h>
 
 namespace Corvus
 {

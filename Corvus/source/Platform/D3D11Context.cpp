@@ -1,11 +1,9 @@
 #if defined(CORVUS_RENDERER_DIRECT3D11) && defined(CORVUS_PLATFORM_WIN32)
 
+#include "../Core/PCH.hpp"
 #include "../Log.hpp"
 #include "../Window.hpp"
 #include "D3D11Context.hpp"
-#include <dxgi.h>
-#include <d3d11.h>
-#include <windows.h>
 
 namespace Corvus
 {

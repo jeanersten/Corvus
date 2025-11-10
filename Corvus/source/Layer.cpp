@@ -1,6 +1,5 @@
+#include "Core/PCH.hpp"
 #include "Layer.hpp"
-#include <algorithm>
-#include <string>
 
 namespace Corvus
 {
