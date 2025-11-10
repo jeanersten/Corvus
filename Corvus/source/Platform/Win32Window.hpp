@@ -2,15 +2,15 @@
 
 #if defined(CORVUS_PLATFORM_WIN32)
 
-#include "Core/Core.hpp"
-#include "GraphicsContext.hpp"
-#include "Window.hpp"
+#include "../Core/Core.hpp"
+#include "../Event.hpp"
+#include "../Window.hpp"
 #include <windows.h>
-#include <functional>
+#include <cwchar>
 
 namespace Corvus
 {
-  class Win32Window : public Window
+  class Win32Window final : public Window
   {
   public:
     Win32Window(Uint32 width, Uint32 height, const wchar_t* title);
@@ -41,23 +41,18 @@ namespace Corvus
       m_callback = callback;
     }
 
-    void PollEvents() override;
-
   private:
-    static constexpr PCWSTR const CLASS_NAME { L"CorvusWindow" };
+    static constexpr PCWSTR CLASS_NAME{ L"CorvusWindow" };
 
     WindowData m_data;
     bool m_should_close;
-
     EventCallbackFn m_callback;
-
-    GraphicsContext* m_context;
-
     HWND m_handle;
 
     static LRESULT CALLBACK Callback(HWND handle, UINT msg_type,
                                      WPARAM wparam, LPARAM lparam);
-    LRESULT HandleMessage(UINT msg_type, WPARAM wparam, LPARAM lparam);
+    LRESULT HandleMessage(UINT msg_type,
+                          WPARAM wparam, LPARAM lparam);
   };
 }
 

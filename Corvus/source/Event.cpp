@@ -1,4 +1,5 @@
 #include "Core/Core.hpp"
+#include "Platform/Platform.hpp"
 #include "Event.hpp"
 
 namespace Corvus
@@ -6,6 +7,11 @@ namespace Corvus
   Event::Event()
     : m_handled(false)
   {}
+
+  void Event::Poll()
+  {
+    CORVUS_PLATFORM_EVENT_POLL_TYPE::UpMessages();
+  }
 
   EventDispatcher::EventDispatcher(Event& event)
     : m_event(event)

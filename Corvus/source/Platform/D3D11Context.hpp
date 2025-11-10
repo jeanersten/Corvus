@@ -2,17 +2,16 @@
 
 #if defined(CORVUS_RENDERER_DIRECT3D11) && defined(CORVUS_PLATFORM_WIN32)
 
-#include "Core/Core.hpp"
-#include "GraphicsContext.hpp"
-#include "Window.hpp"
-#include <d3d11.h>
+#include "../GraphicsContext.hpp"
+#include "../Window.hpp"
 #include <dxgi.h>
+#include <d3d11.h>
 #include <windows.h>
 #include <wrl.h>
 
 namespace Corvus
 {
-  class D3D11Context : public GraphicsContext
+  class D3D11Context final : public GraphicsContext
   {
     template<typename T>
     using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -22,7 +21,7 @@ namespace Corvus
     ~D3D11Context() override = default;
 
     void Init() override;
-    void ResizeBuffers() override;
+    void ResizeBuffers(Uint32 width, Uint32 height) override;
     void SwapBuffers() override;
   
   private:

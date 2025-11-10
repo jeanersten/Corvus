@@ -1,12 +1,13 @@
-#include "Win32Window.hpp"
+#include "Core/Core.hpp"
+#include "Platform/Platform.hpp"
 #include "Window.hpp"
+#include <cwchar>
 
 namespace Corvus
 {
-  Window* Window::Create(Uint32 width, Uint32 height, const wchar_t* title)
+  std::unique_ptr<Window> Window::Create(Uint32 width, Uint32 height,
+                                         const wchar_t* title)
   {
-    #ifdef CORVUS_PLATFORM_WIN32
-      return new Win32Window(width, height, title);
-    #endif
+    return std::make_unique<CORVUS_PLATFORM_WINDOW_TYPE>(width, height, title);
   }
 }

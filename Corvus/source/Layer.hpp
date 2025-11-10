@@ -3,7 +3,6 @@
 #include "Core/Core.hpp"
 #include "Event.hpp"
 #include <string>
-#include <vector>
 
 namespace Corvus
 {
@@ -18,33 +17,12 @@ namespace Corvus
       return m_name;
     }
 
-    virtual void OnAttach() = 0;
-    virtual void OnDetach() = 0;
-    virtual void OnUpdate() = 0;
-    virtual void OnEvent(Event& event) = 0;
+    virtual void Attach() = 0;
+    virtual void Detach() = 0;
+    virtual void Update() = 0;
+    virtual void RespondEvent(Event& event) = 0;
 
   protected:
     std::string m_name;
-  };
-
-  class CORVUS_API LayerStack
-  {
-  public:
-    LayerStack();
-    ~LayerStack();
-
-    inline const std::vector<Layer*>& GetLayers()
-    {
-      return m_layers;
-    }
-
-    void PushLayer(Layer* layer);
-    void PopLayer(Layer* layer);
-    void PushOverlay(Layer* overlay);
-    void PopOverlay(Layer* overlay);
-
-  private:
-    std::vector<Layer*> m_layers;
-    std::vector<Layer*>::iterator m_layer_index;
   };
 }

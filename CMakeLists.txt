@@ -5,7 +5,6 @@ set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED TRUE)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
-set(CMAKE_CONFIGURATION_TYPES Debug Release)
 
 add_subdirectory("Corvus")
 add_subdirectory("Sandbox")

@@ -1,7 +1,6 @@
 #include "Application.hpp"
 #include "Event.hpp"
 #include "Layer.hpp"
-#include "Log.hpp"
 #include <chrono>
 #include <functional>
 #include <thread>
@@ -10,84 +9,78 @@ namespace Corvus
 {
   Application::Application()
     : m_window(nullptr)
-    , m_layer_stack(nullptr)
-  {
-    m_window = Window::Create(640, 480, L"Corvus Engine");
-    m_window->SetEventCallback(std::bind(&Application::OnEvent, this,
-                                         std::placeholders::_1));
+    , m_context(nullptr)
+    , m_layers()
+    , m_overlays()
+  {}
 
-    m_layer_stack = new LayerStack();
+  void Application::Update()
+  {
+    for (auto& overlay : m_overlays) overlay->Update();
+    for (auto& layer : m_layers) layer->Update();
+
+    // TODO: Implement rendering class to handle this instead.
+    m_context->SwapBuffers();
   }
 
-  Application::~Application()
+  void Application::RespondEvent(Event& event)
   {
-    delete m_window;
-    delete m_layer_stack;
-  }
+    EventDispatcher dispatcher{ event };
 
-  void Application::PushLayer(Layer* layer)
-  {
-    m_layer_stack->PushLayer(layer);
-    layer->OnAttach();
-  }
+    dispatcher.Send<WindowResizedEvent>([this](auto& event){
+      m_context->ResizeBuffers(event.GetWidth(), event.GetHeight());
 
-  void Application::PopLayer(Layer* layer)
-  {
-    m_layer_stack->PopLayer(layer);
-    layer->OnDetach();
-  }
+      return false;
+    });
 
-  void Application::PushOverlay(Layer* overlay)
-  {
-    m_layer_stack->PushOverlay(overlay);
-    overlay->OnAttach();
-  }
+    for (auto it = m_overlays.rbegin(); it != m_overlays.rend(); it++)
+    {
+      if (event.IsHandled()) break;
 
-  void Application::PopOverlay(Layer* overlay)
-  {
-    m_layer_stack->PopOverlay(overlay);
-    overlay->OnDetach();
+      (*it)->RespondEvent(event);
+    }
+
+    for (auto it = m_layers.rbegin(); it != m_layers.rend(); it++)
+    {
+      if (event.IsHandled()) break;
+
+      (*it)->RespondEvent(event);
+    }
   }
   
-  void Application::OnSetup()
-  {}
-
-  void Application::OnCleanup()
-  {}
-
-  void Application::OnUpdate()
+  void Application::Setup()
   {
-    for (Layer* layer : m_layer_stack->GetLayers())
-    {
-      layer->OnUpdate();
-    }
+    m_window = Window::Create(640, 480, L"Corvus Engine");
+    m_window->SetEventCallback(std::bind(&Application::RespondEvent, this,
+                               std::placeholders::_1));
+
+    m_context = GraphicsContext::Create(m_window.get());
+    m_context->Init();
   }
 
-  void Application::OnEvent(Event& event)
+  void Application::Cleanup()
   {
-    for (auto it = m_layer_stack->GetLayers().rbegin();
-         it != m_layer_stack->GetLayers().rend(); it++)
-    {
-      (*it)->OnEvent(event);
+    for (auto& overlay : m_overlays) overlay->Detach();
+    m_overlays.clear();
 
-      if (event.IsHandled()) break;
-    }
+    for (auto& layer : m_layers) layer->Detach();
+    m_layers.clear();
   }
 
   void Application::Run()
   {
-    OnSetup();
+    Setup();
 
     while (!m_window->ShouldClose())
     {
-      m_window->PollEvents();
+      Event::Poll();
 
-      OnUpdate();
+      Update();
 
-      // debugging purpose, better solution soon
+      // HACK: Debugging purpose, find a better solution soon.
       std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
 
-    OnCleanup();
+    Cleanup();
   }
 }

@@ -43,12 +43,14 @@ namespace Corvus
     friend class EventDispatcher;
 
   public:
-    inline bool IsHandled()
+    static void Poll();
+
+    inline bool IsHandled() const
     {
       return m_handled;
     }
 
-    inline bool IsInCategory(EventCategory category)
+    inline bool IsInCategory(EventCategory category) const
     {
       return static_cast<bool>(GetCategory() & category);
     }
@@ -72,7 +74,7 @@ namespace Corvus
     EventDispatcher(Event& event);
     ~EventDispatcher() = default;
 
-    // send event message if event type matches static type
+    // TODO: Implement queue based non-blocking event system instead.
     template<typename T>
     bool Send(EventFn<T> callback)
     {
@@ -90,13 +92,13 @@ namespace Corvus
     Event& m_event;
   };
 
-  class CORVUS_API WindowCreatedEvent : public Event
+  class CORVUS_API WindowCreatedEvent final : public Event
   {
   public:
     WindowCreatedEvent() = default;
     ~WindowCreatedEvent() override = default;
 
-    inline static EventType GetStaticType()
+    static inline EventType GetStaticType()
     {
       return EventType::WindowCreated;
     }
@@ -112,13 +114,13 @@ namespace Corvus
     }
   };
 
-  class CORVUS_API WindowDestroyedEvent : public Event
+  class CORVUS_API WindowDestroyedEvent final : public Event
   {
   public:
     WindowDestroyedEvent() = default;
     ~WindowDestroyedEvent() override = default;
 
-    inline static EventType GetStaticType()
+    static inline EventType GetStaticType()
     {
       return EventType::WindowDestroyed;
     }
@@ -134,13 +136,13 @@ namespace Corvus
     }
   };
 
-  class CORVUS_API WindowGainedFocusEvent : public Event
+  class CORVUS_API WindowGainedFocusEvent final : public Event
   {
   public:
     WindowGainedFocusEvent() = default;
     ~WindowGainedFocusEvent() override = default;
 
-    inline static EventType GetStaticType()
+    static inline EventType GetStaticType()
     {
       return EventType::WindowGainedFocus;
     }
@@ -156,13 +158,13 @@ namespace Corvus
     }
   };
 
-  class CORVUS_API WindowLostFocusEvent : public Event
+  class CORVUS_API WindowLostFocusEvent final : public Event
   {
   public:
     WindowLostFocusEvent() = default;
     ~WindowLostFocusEvent() override = default;
 
-    inline static EventType GetStaticType()
+    static inline EventType GetStaticType()
     {
       return EventType::WindowLostFocus;
     }
@@ -178,13 +180,13 @@ namespace Corvus
     }
   };
 
-  class CORVUS_API WindowMovedEvent : public Event
+  class CORVUS_API WindowMovedEvent final : public Event
   {
   public:
     WindowMovedEvent(Uint32 x, Uint32 y);
     ~WindowMovedEvent() override = default;
 
-    inline static EventType GetStaticType()
+    static inline EventType GetStaticType()
     {
       return EventType::WindowMoved;
     }
@@ -214,13 +216,13 @@ namespace Corvus
     Uint32 m_y;
   };
 
-  class CORVUS_API WindowResizedEvent : public Event
+  class CORVUS_API WindowResizedEvent final : public Event
   {
   public:
     WindowResizedEvent(Uint32 width, Uint32  height);
     ~WindowResizedEvent() override = default;
 
-    inline static EventType GetStaticType()
+    static inline EventType GetStaticType()
     {
       return EventType::WindowResized;
     }
@@ -250,14 +252,14 @@ namespace Corvus
     Uint32 m_height;
   };
 
-  class CORVUS_API KeyboardKeyPressedEvent : public Event
+  class CORVUS_API KeyboardKeyPressedEvent final : public Event
   {
   public:
     KeyboardKeyPressedEvent(Uint32 key_code,
                             bool is_repeated);
     ~KeyboardKeyPressedEvent() override = default;
 
-    inline static EventType GetStaticType()
+    static inline EventType GetStaticType()
     {
       return EventType::KeyboardKeyPressed;
     }
@@ -282,13 +284,13 @@ namespace Corvus
     bool m_is_repeated;
   };
 
-  class CORVUS_API KeyboardKeyReleasedEvent : public Event
+  class CORVUS_API KeyboardKeyReleasedEvent final : public Event
   {
   public:
     KeyboardKeyReleasedEvent(Uint32 key_code);
     ~KeyboardKeyReleasedEvent() override = default;
 
-    inline static EventType GetStaticType()
+    static inline EventType GetStaticType()
     {
       return EventType::KeyboardKeyReleased;
     }
@@ -307,13 +309,13 @@ namespace Corvus
     Uint32 m_key_coode;
   };
 
-  class CORVUS_API MouseButtonPressedEvent : public Event
+  class CORVUS_API MouseButtonPressedEvent final : public Event
   {
   public:
     MouseButtonPressedEvent(Uint32 button_code);
     ~MouseButtonPressedEvent() override = default;
 
-    inline static EventType GetStaticType()
+    static inline EventType GetStaticType()
     {
       return EventType::MouseButtonPressed;
     }
@@ -332,13 +334,13 @@ namespace Corvus
     Uint32 m_button_code;
   };
 
-  class CORVUS_API MouseButtonReleasedEvent : public Event
+  class CORVUS_API MouseButtonReleasedEvent final : public Event
   {
   public:
     MouseButtonReleasedEvent(Uint32 button_code);
     ~MouseButtonReleasedEvent() override = default;
 
-    inline static EventType GetStaticType()
+    static inline EventType GetStaticType()
     {
       return EventType::MouseButtonReleased;
     }

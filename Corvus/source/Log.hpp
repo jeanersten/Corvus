@@ -1,19 +1,10 @@
 #pragma once
 
 #include "Core/Core.hpp"
-#include <chrono>
 #include <format>
 #include <print>
 #include <string>
 #include <string_view>
-
-#define CORVUS_LOG_COLOR_UNKNOWN "\x1B[90m"
-#define CORVUS_LOG_COLOR_TRACE   "\x1B[36m"
-#define CORVUS_LOG_COLOR_INFO    "\x1B[32m"
-#define CORVUS_LOG_COLOR_WARN    "\x1B[33m"
-#define CORVUS_LOG_COLOR_ERR     "\x1B[31m"
-#define CORVUS_LOG_COLOR_FATAL   "\x1B[95m"
-#define CORVUS_LOG_COLOR_DEFAULT "\x1B[0m"
 
 namespace Corvus
 {
@@ -33,53 +24,59 @@ namespace Corvus
     Logger(const std::string& name);
     ~Logger() = default;
 
-    // default print
     template<typename... Args>
-    void Print(std::format_string<Args...> fmt,
-               Args&&... args) const
+    void Print(std::format_string<Args...> fmt, Args&&... args) const
     {
-      std::chrono::time_point now_tp { std::chrono::floor<std::chrono::seconds>(
-                                       std::chrono::system_clock::now()) };
-
-      std::string time_str { std::format("{:%d-%m-%Y %H:%M:%S}",
-                             std::chrono::current_zone()->to_local(now_tp)) };
       std::string format_str { std::format(fmt, std::forward<Args>(args)...) };
 
-      std::println("[{}]-[{}]-[{}]: {}", m_name, time_str,
-                   GetLevelString(LogLevel::None), format_str);
+      std::println("[{}]-[{}]-[{}{}{}]: {}", m_name,
+                   COLOR_GRAY, GetCurrentTimeString(), COLOR_RESET,
+                   GetLevelColorString(LogLevel::None),
+                   GetLevelString(LogLevel::None),
+                   COLOR_RESET,
+                   format_str);
     }
 
-    // leveled print
     template<typename... Args>
     void Print(LogLevel level, std::format_string<Args...> fmt,
                Args&&... args) const
     {
-      std::chrono::time_point now_tp { std::chrono::floor<std::chrono::seconds>(
-                                       std::chrono::system_clock::now()) };
 
-      std::string time_str { std::format("{:%d-%m-%Y %H:%M:%S}",
-                             std::chrono::current_zone()->to_local(now_tp)) };
       std::string format_str { std::format(fmt, std::forward<Args>(args)...) };
 
-      std::println("[{}]-[{}]-[{}]: {}", m_name, time_str,
-                   GetLevelString(level), format_str);
+      std::println("[{}]-[{}{}{}]-[{}{}{}]: {}", m_name,
+                   COLOR_GRAY, GetCurrentTimeString(), COLOR_RESET,
+                   GetLevelColorString(level),
+                   GetLevelString(level),
+                   COLOR_RESET,
+                   format_str);
     }
 
   private:
+    static constexpr const char* COLOR_RESET  { "\x1B[0m" };
+    static constexpr const char* COLOR_RED    { "\x1B[31m" };
+    static constexpr const char* COLOR_GREEN  { "\x1B[32m" };
+    static constexpr const char* COLOR_YELLOW { "\x1B[33m" };
+    static constexpr const char* COLOR_MAGENTA{ "\x1B[35m" };
+    static constexpr const char* COLOR_CYAN   { "\x1B[36m" };
+    static constexpr const char* COLOR_GRAY   { "\x1B[90m" };
+
     std::string m_name;
 
     std::string_view GetLevelString(LogLevel level) const;
+    std::string_view GetLevelColorString(LogLevel level) const;
+    std::string_view GetCurrentTimeString() const;
   };
 
   class CORVUS_API Log
   {
   public:
-    inline static const Logger& GetEngineLogger()
+    static inline const Logger& GetEngineLogger()
     {
       return s_engine_logger;
     }
 
-    inline static const Logger& GetClientLogger()
+    static inline const Logger& GetClientLogger()
     {
       return s_client_logger;
     }

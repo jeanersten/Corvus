@@ -1,13 +1,20 @@
 cmake_minimum_required(VERSION 3.30...3.80)
-project(Corvus LANGUAGES C CXX)
+project(Corvus)
 
 add_library(Corvus SHARED
   "include/Corvus/Engine.hpp"
+  "include/Corvus/Entry.hpp"
   "source/Core/Core.hpp"
+  "source/Platform/D3D11Context.hpp"
+  "source/Platform/D3D11Context.cpp"
+  "source/Platform/Platform.hpp"
+  "source/Platform/Platform.cpp"
+  "source/Platform/Win32EventPoll.hpp"
+  "source/Platform/Win32EventPoll.cpp"
+  "source/Platform/Win32Window.hpp"
+  "source/Platform/Win32Window.cpp"
   "source/Application.hpp"
   "source/Application.cpp"
-  "source/D3D11Context.hpp"
-  "source/D3D11Context.cpp"
   "source/Event.hpp"
   "source/Event.cpp"
   "source/GraphicsContext.hpp"
@@ -16,18 +23,13 @@ add_library(Corvus SHARED
   "source/Layer.cpp"
   "source/Log.hpp"
   "source/Log.cpp"
-  "source/Platform.hpp"
-  "source/Platform.cpp"
-  "source/Win32Window.hpp"
-  "source/Win32Window.cpp"
   "source/Window.hpp"
   "source/Window.cpp"
-)
+ )
 
 target_compile_definitions(Corvus
   PUBLIC
   $<$<CONFIG:Debug>:"CORVUS_DEBUG">
-  $<$<CONFIG:Release>:"CORVUS_RELEASE">
   PRIVATE
   "CORVUS_BUILD_ENGINE"
 )
@@ -44,10 +46,10 @@ if(WIN32)
     )
 
     target_link_libraries(Corvus
-      d3d11 dxgi
+      dxgi d3d11
     )
   endif()
-
+  
   target_compile_definitions(Corvus
     PUBLIC
     "UNICODE"
