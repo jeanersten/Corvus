@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Core.hpp"
+#include <cstdlib>
 #include <format>
 #include <print>
 #include <string>
@@ -50,6 +51,11 @@ namespace Corvus
                    GetLevelString(level),
                    COLOR_RESET,
                    format_str);
+
+      if (level == LogLevel::Fatal)
+      {
+        std::exit(EXIT_FAILURE);
+      }
     }
 
   private:
