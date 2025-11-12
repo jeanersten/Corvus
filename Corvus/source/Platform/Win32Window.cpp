@@ -78,7 +78,7 @@ namespace Corvus
   LRESULT Win32Window::HandleMessage(UINT msg_type,
                                      WPARAM wparam, LPARAM lparam)
   {
-    int result{ 0 };
+    LRESULT result{ 0 };
 
     switch(msg_type)
     {

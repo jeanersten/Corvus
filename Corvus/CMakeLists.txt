@@ -7,6 +7,8 @@ add_library(Corvus SHARED
   "source/Core/Core.hpp"
   "source/Platform/D3D11Context.hpp"
   "source/Platform/D3D11Context.cpp"
+  "source/Platform/OpenGLContext.hpp"
+  "source/Platform/OpenGLContext.cpp"
   "source/Platform/Platform.hpp"
   "source/Platform/Platform.cpp"
   "source/Platform/Win32EventPoll.hpp"
@@ -27,6 +29,23 @@ add_library(Corvus SHARED
   "source/Window.cpp"
 )
 
+option(CORVUS_USE_OPENGL_RENDERER "Use OpenGL for rendering" OFF)
+option(CORVUS_USE_DIRECT3D11_RENDERER "Use Direct3D 11 for rendering" OFF)
+
+if(CORVUS_USE_OPENGL_RENDERER)
+  add_subdirectory("vendor/glad-0.1.36")
+
+  target_compile_definitions(Corvus
+    PUBLIC
+    "CORVUS_RENDERER_OPENGL"
+  )
+elseif(CORVUS_USE_DIRECT3D11_RENDERER)
+  target_compile_definitions(Corvus
+    PUBLIC
+    "CORVUS_RENDERER_DIRECT3D11"
+  )
+endif()
+
 target_compile_definitions(Corvus
   PUBLIC
   $<$<CONFIG:Debug>:"CORVUS_DEBUG">
@@ -42,18 +61,11 @@ target_precompile_headers(Corvus
 target_include_directories(Corvus PUBLIC "include")
 
 if(WIN32)
-  option(CORVUS_USE_DIRECT3D11_RENDERER "Use Direct3D 11 for rendering" OFF)
-
-  if(CORVUS_USE_DIRECT3D11_RENDERER)
-    target_compile_definitions(Corvus
-      PUBLIC
-      "CORVUS_RENDERER_DIRECT3D11"
-    )
-
-    target_link_libraries(Corvus
-      dxgi d3d11
-    )
-  endif()
+  target_link_libraries(Corvus
+    PUBLIC
+    $<$<BOOL:${CORVUS_USE_OPENGL_RENDERER}>:opengl32 glad>
+    $<$<BOOL:${CORVUS_USE_DIRECT3D11_RENDERER}>:dxgi d3d11>
+  )
 
   target_compile_definitions(Corvus
     PUBLIC

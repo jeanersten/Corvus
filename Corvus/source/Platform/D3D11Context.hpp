@@ -2,6 +2,7 @@
 
 #if defined(CORVUS_RENDERER_DIRECT3D11) && defined(CORVUS_PLATFORM_WIN32)
 
+#include "../Core/Core.hpp"
 #include "../GraphicsContext.hpp"
 #include "../Window.hpp"
 #include <dxgi.h>

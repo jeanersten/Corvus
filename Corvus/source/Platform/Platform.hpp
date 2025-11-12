@@ -2,6 +2,7 @@
 
 #include "../Core/Core.hpp"
 #include "D3D11Context.hpp"
+#include "OpenGLContext.hpp"
 #include "Win32EventPoll.hpp"
 #include "Win32Window.hpp"
 
@@ -34,7 +35,9 @@ namespace Corvus
 #if defined (CORVUS_PLATFORM_WIN32)
   #define CORVUS_PLATFORM_EVENT_POLL_TYPE Win32EventPoll
 
-  #if defined(CORVUS_RENDERER_DIRECT3D11)
+  #if defined(CORVUS_RENDERER_OPENGL)
+    #define CORVUS_PLATFORM_GRAPHICS_CONTEXT_TYPE WGLContext
+  #elif defined(CORVUS_RENDERER_DIRECT3D11)
     #define CORVUS_PLATFORM_GRAPHICS_CONTEXT_TYPE D3D11Context
   #endif
 

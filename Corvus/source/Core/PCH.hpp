@@ -4,7 +4,9 @@
   #include <windows.h>
   #include <wrl.h>
 
-  #if defined(CORVUS_RENDERER_DIRECT3D11)
+  #if defined(CORVUS_RENDERER_OPENGL)
+    #include <glad/glad.h>
+  #elif defined(CORVUS_RENDERER_DIRECT3D11)
     #include <dxgi.h>
     #include <d3d11.h>
   #endif

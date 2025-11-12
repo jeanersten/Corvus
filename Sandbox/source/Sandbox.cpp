@@ -21,14 +21,10 @@ public:
   }
 
   void Update() override
-  {
-    CORVUS_LOG_INFO("Updated layer: {}", GetName());
-  }
+  {}
 
   void RespondEvent(Corvus::Event&) override
-  {
-    CORVUS_LOG_INFO("Event occurred in layer: {}", GetName());
-  }
+  {}
 };
 
 class Sandbox final: public Corvus::Application
