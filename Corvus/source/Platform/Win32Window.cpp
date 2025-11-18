@@ -5,9 +5,15 @@
 #include "../Event.hpp"
 #include "Platform.hpp"
 #include "Win32Window.hpp"
+#include <imgui/imgui.h>
+
+extern IMGUI_IMPL_API ::LRESULT
+ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg,
+                               WPARAM wParam, LPARAM lParam);
 
 namespace Corvus
 {
+
   Win32Window::Win32Window(Uint32 width, Uint32 height, const wchar_t* title)
     : m_data(width, height, title)
     , m_should_close(false)
@@ -79,6 +85,8 @@ namespace Corvus
                                      WPARAM wparam, LPARAM lparam)
   {
     LRESULT result{ 0 };
+
+    ImGui_ImplWin32_WndProcHandler(m_handle, msg_type, wparam, lparam);
 
     switch(msg_type)
     {

@@ -17,6 +17,8 @@ add_library(Corvus SHARED
   "source/Platform/Win32Window.cpp"
   "source/Application.hpp"
   "source/Application.cpp"
+  "source/DebugPanel.hpp"
+  "source/DebugPanel.cpp"
   "source/Event.hpp"
   "source/Event.cpp"
   "source/GraphicsContext.hpp"
@@ -31,6 +33,8 @@ add_library(Corvus SHARED
 
 option(CORVUS_USE_OPENGL_RENDERER "Use OpenGL for rendering" OFF)
 option(CORVUS_USE_DIRECT3D11_RENDERER "Use Direct3D 11 for rendering" OFF)
+
+add_subdirectory("vendor/imgui-1.92.4")
 
 if(CORVUS_USE_OPENGL_RENDERER)
   add_subdirectory("vendor/glad-0.1.36")
@@ -65,6 +69,7 @@ if(WIN32)
     PUBLIC
     $<$<BOOL:${CORVUS_USE_OPENGL_RENDERER}>:opengl32 glad>
     $<$<BOOL:${CORVUS_USE_DIRECT3D11_RENDERER}>:dxgi d3d11>
+    imgui
   )
 
   target_compile_definitions(Corvus

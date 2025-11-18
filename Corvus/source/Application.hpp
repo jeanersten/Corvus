@@ -2,6 +2,7 @@
 
 #include "Core/Core.hpp"
 #include "Event.hpp"
+#include "DebugPanel.hpp"
 #include "GraphicsContext.hpp"
 #include "Layer.hpp"
 #include "Window.hpp"
@@ -26,6 +27,8 @@ namespace Corvus
     std::unique_ptr<GraphicsContext> m_context;
     LayerCollection m_layers;
     LayerCollection m_overlays;
+
+    DebugPanel m_dbg_panel;
 
     virtual void Setup();
     virtual void Cleanup();
@@ -80,6 +83,7 @@ namespace Corvus
 
   private:
     void Update();
+    void Render();
     void RespondEvent(Event& event);
   };
 }

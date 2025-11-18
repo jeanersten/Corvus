@@ -214,11 +214,6 @@ namespace Corvus
 
   void WGLContext::SwapBuffers()
   {
-    // TODO: Move buffer clear color somewhere safer.
-
-    glClearColor(0.22f, 0.54f, 0.65f, 1.00f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
     ::SwapBuffers(m_dc);
   }
 }

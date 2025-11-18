@@ -10,12 +10,20 @@ namespace Corvus
     , m_context(nullptr)
     , m_layers()
     , m_overlays()
+    , m_dbg_panel()
   {}
 
   void Application::Update()
   {
     for (auto& overlay : m_overlays) overlay->Update();
     for (auto& layer : m_layers) layer->Update();
+
+    m_dbg_panel.Update();
+  }
+
+  void Application::Render()
+  {
+    m_dbg_panel.Render();
 
     // TODO: Implement rendering class to handle this instead.
     m_context->SwapBuffers();
@@ -54,6 +62,8 @@ namespace Corvus
 
     m_context = GraphicsContext::Create(m_window.get());
     m_context->Init();
+
+    m_dbg_panel.Start(m_window.get());
   }
 
   void Application::Cleanup()
@@ -74,6 +84,7 @@ namespace Corvus
       Event::Poll();
 
       Update();
+      Render();
 
       // HACK: Debugging purpose, find a better solution soon.
       std::this_thread::sleep_for(std::chrono::milliseconds(16));
