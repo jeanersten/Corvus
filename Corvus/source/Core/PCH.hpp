@@ -14,7 +14,6 @@
 
 #include <algorithm>
 #include <chrono>
-#include <cwchar>
 #include <format>
 #include <functional>
 #include <memory>

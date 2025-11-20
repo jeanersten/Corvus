@@ -32,9 +32,28 @@ add_library(Corvus SHARED
 )
 
 option(CORVUS_USE_OPENGL_RENDERER "Use OpenGL for rendering" OFF)
-option(CORVUS_USE_DIRECT3D11_RENDERER "Use Direct3D 11 for rendering" OFF)
 
 add_subdirectory("vendor/imgui-1.92.4")
+
+if(WIN32)
+  option(CORVUS_USE_DIRECT3D11_RENDERER "Use Direct3D 11 for rendering" OFF)
+
+  target_link_libraries(Corvus
+    PUBLIC
+    $<$<BOOL:${CORVUS_USE_OPENGL_RENDERER}>:opengl32 glad>
+    $<$<BOOL:${CORVUS_USE_DIRECT3D11_RENDERER}>:dxgi d3d11>
+    imgui
+  )
+
+  target_compile_definitions(Corvus
+    PUBLIC
+    "_UNICODE"
+    "UNICODE"
+    "WIN32_LEAN_AND_MEAN"
+    "NOMINMAX"
+    "CORVUS_PLATFORM_WIN32"
+  )
+endif()
 
 if(CORVUS_USE_OPENGL_RENDERER)
   add_subdirectory("vendor/glad-0.1.36")
@@ -63,19 +82,3 @@ target_precompile_headers(Corvus
 )
 
 target_include_directories(Corvus PUBLIC "include")
-
-if(WIN32)
-  target_link_libraries(Corvus
-    PUBLIC
-    $<$<BOOL:${CORVUS_USE_OPENGL_RENDERER}>:opengl32 glad>
-    $<$<BOOL:${CORVUS_USE_DIRECT3D11_RENDERER}>:dxgi d3d11>
-    imgui
-  )
-
-  target_compile_definitions(Corvus
-    PUBLIC
-    "UNICODE"
-    "_UNICODE"
-    "CORVUS_PLATFORM_WIN32"
-  )
-endif()

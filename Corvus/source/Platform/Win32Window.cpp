@@ -14,12 +14,16 @@ ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg,
 namespace Corvus
 {
 
-  Win32Window::Win32Window(Uint32 width, Uint32 height, const wchar_t* title)
-    : m_data(width, height, title)
+  Win32Window::Win32Window(Uint32 width, Uint32 height, std::wstring_view title)
+    : m_data()
     , m_should_close(false)
     , m_callback(nullptr)
     , m_handle(NULL)
   {
+    m_data.width = width;
+    m_data.height = height;
+    m_data.title = title;
+
     WNDCLASS wnd_class{ };
     HINSTANCE instance{ *Platform::GetDataPointer<HINSTANCE>(1) };
 
@@ -30,7 +34,7 @@ namespace Corvus
 
     RegisterClass(&wnd_class);
 
-    RECT wnd_rect{ 0, 0, 
+    RECT wnd_rect{ 0, 0,
                    static_cast<LONG>(m_data.width),
                    static_cast<LONG>(m_data.height) };
 
@@ -39,7 +43,7 @@ namespace Corvus
     Uint32 wnd_width{ static_cast<Uint32>(wnd_rect.right - wnd_rect.left) };
     Uint32 wnd_height{ static_cast<Uint32>(wnd_rect.bottom - wnd_rect.top) };
 
-    m_handle = CreateWindowEx(0, CLASS_NAME, m_data.title,
+    m_handle = CreateWindowEx(0, CLASS_NAME, m_data.title.c_str(),
                               WS_OVERLAPPEDWINDOW,
                               CW_USEDEFAULT, CW_USEDEFAULT,
                               wnd_width, wnd_height,
@@ -52,28 +56,28 @@ namespace Corvus
   LRESULT Win32Window::Callback(HWND handle, UINT msg_type,
                                 WPARAM wparam, LPARAM lparam)
   {
-    Win32Window* this_ptr{ nullptr };
+    Win32Window* wnd_ptr{ nullptr };
 
     if (msg_type == WM_NCCREATE)
     {
       CREATESTRUCT* data_ptr{ reinterpret_cast<CREATESTRUCT*>(lparam) };
 
-      this_ptr = reinterpret_cast<Win32Window*>(data_ptr->lpCreateParams);
+      wnd_ptr = reinterpret_cast<Win32Window*>(data_ptr->lpCreateParams);
 
       SetWindowLongPtr(handle, GWLP_USERDATA,
-                       reinterpret_cast<LONG_PTR>(this_ptr));
+                       reinterpret_cast<LONG_PTR>(wnd_ptr));
 
-      this_ptr->m_handle = handle;
+      wnd_ptr->m_handle = handle;
     }
     else
     {
-      this_ptr = reinterpret_cast<Win32Window*>
+      wnd_ptr = reinterpret_cast<Win32Window*>
                  (GetWindowLongPtr(handle, GWLP_USERDATA));
     }
 
-    if (this_ptr != nullptr)
+    if (wnd_ptr != nullptr)
     {
-      return this_ptr->HandleMessage(msg_type, wparam, lparam);
+      return wnd_ptr->HandleMessage(msg_type, wparam, lparam);
     }
     else
     {
@@ -133,7 +137,7 @@ namespace Corvus
 
       case WM_MOVE:
       {
-        WindowMovedEvent event{ LOWORD(lparam), HIWORD(lparam) }; 
+        WindowMovedEvent event{ LOWORD(lparam), HIWORD(lparam) };
 
         if (m_callback) m_callback(event);
       }
@@ -172,7 +176,7 @@ namespace Corvus
       case WM_LBUTTONDOWN:
       {
         MouseButtonPressedEvent event{ VK_LBUTTON };
-        
+
         if (m_callback) m_callback(event);
       }
       break;
@@ -188,7 +192,7 @@ namespace Corvus
       case WM_RBUTTONDOWN:
       {
         MouseButtonPressedEvent event{ VK_RBUTTON };
-        
+
         if (m_callback) m_callback(event);
       }
       break;

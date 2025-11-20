@@ -2,6 +2,7 @@
 #include "Application.hpp"
 #include "Event.hpp"
 #include "Layer.hpp"
+#include "Log.hpp"
 
 namespace Corvus
 {
@@ -53,9 +54,12 @@ namespace Corvus
       (*it)->RespondEvent(event);
     }
   }
-  
+
   void Application::Setup()
   {
+    CORVUS_SET_CLIENT_LOG_LEVEL(LogLevel::Trace);
+    CORVUS_SET_ENGINE_LOG_LEVEL(LogLevel::Trace);
+
     m_window = Window::Create(640, 480, L"Corvus Engine");
     m_window->SetEventCallback(std::bind(&Application::RespondEvent, this,
                                std::placeholders::_1));

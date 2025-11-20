@@ -14,8 +14,8 @@ public:
   {
     CORVUS_LOG_INFO("Attached layer: {}", GetName());
   }
-
   void Detach() override
+
   {
     CORVUS_LOG_INFO("Detached layer: {}", GetName());
   }

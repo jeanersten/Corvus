@@ -8,7 +8,7 @@
   // NOTE: SetDataPointer stuff probably overengineered.
 
   #if defined(CORVUS_DEBUG)
-    #define CORVUS_REGISTER_APPLICATION_ENTRY(C)               \
+    #define CORVUS_REGISTER_APPLICATION_ENTRY(APPC)            \
     int wmain(int argc, wchar_t* argv[])                       \
     {                                                          \
       HANDLE stdout_handle{ GetStdHandle(STD_OUTPUT_HANDLE) }; \
@@ -26,7 +26,7 @@
       Corvus::Platform::SetDataPointer(2, &cmd_line);          \
       Corvus::Platform::SetDataPointer(3, &show_code);         \
                                                                \
-      C* app{ new C() };                                       \
+      APPC* app{ new APPC() };                                 \
       app->Run();                                              \
                                                                \
       delete app;                                              \
@@ -34,7 +34,7 @@
       return 0;                                                \
     }
   #else
-    #define CORVUS_REGISTER_APPLICATION_ENTRY(C)       \
+    #define CORVUS_REGISTER_APPLICATION_ENTRY(APPC)    \
     int wWinMain(HINSTANCE instance, HINSTANCE,        \
                  PWSTR cmd_line, int show_code)        \
     {                                                  \
@@ -42,7 +42,7 @@
       Corvus::Platform::SetDataPointer(2, &cmd_line);  \
       Corvus::Platform::SetDataPointer(3, &show_code); \
                                                        \
-      C* app{ new C() };                               \
+      APPC* app{ new APPC() };                         \
       app->Run();                                      \
                                                        \
       delete app;                                      \
@@ -51,6 +51,6 @@
     }
    #endif
 #else
-  #define CORVUS_REGISTER_APPLICATION_ENTRY(C)
+  #define CORVUS_REGISTER_APPLICATION_ENTRY(APPC)
   #error [Platform is not supported!]
 #endif

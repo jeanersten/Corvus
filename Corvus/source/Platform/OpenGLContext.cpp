@@ -170,7 +170,7 @@ namespace Corvus
 
     if (!format_count)
     {
-      CORVUS_LOG_ERR("Failed to load OpenGL 3.3 pixel format!");
+      CORVUS_LOG_ERROR("Failed to load OpenGL 3.3 pixel format!");
     }
 
     PIXELFORMATDESCRIPTOR pf_desc{ };
@@ -179,7 +179,7 @@ namespace Corvus
 
     if (!SetPixelFormat(m_dc, pixel_format, &pf_desc))
     {
-      CORVUS_LOG_ERR("Failed to set OpenGL 3.3 rendering context!");
+      CORVUS_LOG_ERROR("Failed to set OpenGL 3.3 rendering context!");
     }
 
     int gl33_attribs[]{
@@ -193,17 +193,17 @@ namespace Corvus
 
     if (m_glrc == NULL)
     {
-      CORVUS_LOG_ERR("Failed to create OpenGL 3.3 rendering context!");
+      CORVUS_LOG_ERROR("Failed to create OpenGL 3.3 rendering context!");
     }
 
     if (!wglMakeCurrent(m_dc, m_glrc))
     {
-      CORVUS_LOG_ERR("Failed to activate OpenGL 3.3 rendering context!");
+      CORVUS_LOG_ERROR("Failed to activate OpenGL 3.3 rendering context!");
     }
 
     if (!gladLoadGL())
     {
-      CORVUS_LOG_ERR("Failed to load OpenGL functions via GLAD!");
+      CORVUS_LOG_ERROR("Failed to load OpenGL functions via GLAD!");
     }
   }
 

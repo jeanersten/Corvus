@@ -6,14 +6,14 @@
 #include "../Event.hpp"
 #include "../Window.hpp"
 #include <windows.h>
-#include <cwchar>
+#include <string_view>
 
 namespace Corvus
 {
   class Win32Window final : public Window
   {
   public:
-    Win32Window(Uint32 width, Uint32 height, const wchar_t* title);
+    Win32Window(Uint32 width, Uint32 height, std::wstring_view title);
     ~Win32Window() override = default;
 
     inline Uint32 GetWidth() const override
